@@ -93,5 +93,32 @@ describe('ifElse', () => {
     }).not.toThrowError();
   });
 
-  // write tests here
+  it(`should run 'condition' callback only one time `, () => {
+    const condition = jest.fn();
+
+    ifElse(condition, firstCallback, secondCallback);
+
+    expect(condition)
+      .toHaveBeenCalledTimes(1);
+  });
+
+  it(`should run each callback without arguments`, () => {
+    const condition = jest
+      .fn()
+      .mockReturnValueOnce(true)
+      .mockReturnValueOnce(false);
+
+    ifElse(condition, firstCallback, secondCallback);
+
+    expect(condition)
+      .toHaveBeenCalledWith();
+
+    expect(firstCallback)
+      .toHaveBeenCalledWith();
+
+    ifElse(condition, firstCallback, secondCallback);
+
+    expect(secondCallback)
+      .toHaveBeenCalledWith();
+  });
 });
